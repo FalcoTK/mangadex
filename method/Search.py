@@ -18,6 +18,8 @@ class Search:
             title (str): The title of the manga to search for.
             MaxSearch (int, optional): The maximum number of results to return. Defaults to 5.
 
+                                       If the fetch fails, consider decreasing MaxChapters.
+
         Returns:
             List[Dict]: A list of dictionaries containing manga information.
 
@@ -87,6 +89,8 @@ class Search:
         Args:
             AuthorName (str): The name of the author to search for.
             MaxSearch (int, optional): The maximum number of results to return. Defaults to 5.
+
+                                       If the fetch fails, consider decreasing MaxChapters.
 
         Returns:
             List[Dict]: A list of dictionaries containing author information.
@@ -171,6 +175,9 @@ class Search:
         Args:
             GroupName (str): The name of the group to search for.
             MaxSearch (int, optional): The maximum number of results to return. Defaults to 5.
+
+
+                                       If the fetch fails, consider decreasing MaxChapters.
 
         Returns:
             List[Dict]: A list of dictionaries containing group information.
