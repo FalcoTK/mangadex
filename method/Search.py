@@ -247,3 +247,62 @@ class Search:
             except Exception as e:
                 logging.error(f"An error occurred while fetching group: {e}")
                 raise FetchErrorr(f"An error occurred while fetching group: {e}")
+
+    async def RandomSearch(self):
+        """
+        Fetches a random manga and retrieves its ID, title, alternative titles, and description.
+
+        Returns:
+            Dict[str, Any]: A dictionary containing the manga ID, title, alternative titles, and description.
+
+        Raises:
+            ConnectionError: If the response status code is not 200.
+            NotFoundError: If the manga search returns an error.
+            FetchErrorr: For other general errors during the fetch process.
+        """
+        with Session(impersonate="chrome120") as s:
+            try:
+                logging.info(f"Searching for Random manga")
+
+                response = s.get(
+                    "https://api.mangadex.org/manga/random?contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&includes[]=artist&includes[]=author&includes[]=cover_art"
+                )
+
+                if response.status_code != 200:
+                    logging.error(
+                        f"Failed to fetch Random Manga. Status code: {response.status_code}"
+                    )
+                    raise ConnectionError(
+                        f"Failed to fetch Radnom Manga. Status code: {response.status_code}"
+                    )
+
+                data = response.json()
+
+                if data["result"] == "error":
+                    logging.error("Manga search returned an error.")
+                    raise NotFoundError("Something went wrong")
+
+                manga = data["data"]
+                MangaInfo = {
+                    "id": manga["id"],
+                    "title": manga["attributes"]["title"]["en"],
+                    "altTitles": [
+                        alt_title["en"]
+                        for alt_title in manga["attributes"].get("altTitles", [])
+                        if "en" in alt_title
+                    ],
+                    "description": manga["attributes"]["description"].get("en", ""),
+                    "year": manga["attributes"].get("year", None),
+                    "tags": [
+                        tag["attributes"]["name"]["en"]
+                        for tag in manga["attributes"].get("tags", [])
+                    ],
+                    "status": manga["attributes"].get("status", "Unknown"),
+                }
+
+                logging.info("Successfully fetched random manga.")
+                return MangaInfo
+
+            except Exception as e:
+                logging.error(f"An error occurred while fetching manga: {e}")
+                raise FetchErrorr(f"An error occurred while fetching manga: {e}")
