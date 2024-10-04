@@ -4,14 +4,20 @@ import logging
 
 
 class manga:
-    """Manga reader for fetching manga chapters and their images from MangaDex."""
+    """
+    # COPPYRIGHT MANGA, PROVIDER `MANGADEX <https://mangadex.org/>`_
+    Manga reader for fetching manga chapters and their images from MangaDex.
+
+    This class provides methods to fetch chapter details and images using the MangaDex API.
+    It includes error handling for connection issues and JSON parsing errors.
+    """
 
     def __init__(self):
-        """Initializes the Manga reader with logging configuration."""
         logging.basicConfig(level=logging.INFO)
 
     async def FetchChapterIMG(self, ChapterID: str):
         """
+        ### COPPYRIGHT MANGA, PROVIDER `MANGADEX <https://mangadex.org/>`_
         Fetches images for a given chapter ID.
 
         Args:
@@ -24,6 +30,11 @@ class manga:
             ConnectionError: If the response status code is not 200.
             JSONError: If the JSON payload cannot be parsed.
             FetchErrorr: For other general errors during the fetch process.
+
+        Example:
+
+        ```python
+            images = await manga_instance.FetchChapterIMG("chapter_id_here")
         """
         with Session(impersonate="chrome120") as s:
             try:
@@ -60,22 +71,25 @@ class manga:
 
     async def FetchChapter(self, mangaID: str, MaxChapters: int = None):
         """
+        ### COPPYRIGHT MANGA, PROVIDER `MANGADEX <https://mangadex.org/>`_
         Fetches chapter details for a given manga ID.
 
         Args:
             mangaID (str): The ID of the manga to fetch chapters for.
             MaxChapters (int, optional): The maximum number of chapters to fetch. Defaults to 40.
-
-                                         If the fetch fails, consider decreasing MaxChapters.
-
+                If the fetch fails, consider decreasing MaxChapters.
 
         Returns:
-            List[Dict[str, Any]]: A list of dictionaries containing chapter details.
+                List[Dict[str, Any]]: A list of dictionaries containing chapter details.
 
         Raises:
             ConnectionError: If the response status code is not 200.
             JSONError: If the JSON payload cannot be parsed.
             FetchErrorr: For other general errors during the fetch process.
+
+        Example:
+        ```python
+            chapters = await manga_instance.FetchChapter("manga_id_here", MaxChapters=10)
         """
         with Session(impersonate="chrome120") as s:
             try:
